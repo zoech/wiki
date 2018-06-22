@@ -5,7 +5,7 @@
 ``` python
 from Crypto.PublicKey import RSA
 
-SEND_PRIVATE_KEY = """-----BEGIN PRIVATE KEY-----
+priKey = """-----BEGIN PRIVATE KEY-----
 MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBANbN+As/+MYYt6H/
 AJ0XhuqRke5pih2frWsJsc3QstZgXVhL09f7naopRCWb9pVFlctt25TxZE97G4el
 4Z66y4s5pWzTRSVaGqfQ56RVe6psTWng1foMgL9me1Gl1HO8qIxHpxTjB6yj5urc
@@ -22,7 +22,7 @@ qah1Qu+4rUl9PNttOl56Ksn+5Bon4h0jIU3+wJIeRFPK3KUxvbz+3jvWunsXHVof
 f6NckDHDk6g35A==
 -----END PRIVATE KEY-----"""
 
-rsakey = RSA.importKey(SEND_PRIVATE_KEY)
+rsakey = RSA.importKey(priKey)
 ```
 
 2.用Crypto进行md5withRSA算法签名
@@ -49,3 +49,24 @@ print(signStr)
 输出结果如下，这个是用上面私钥对“123456”进行签名的结果，可以进行测试
 
 > 128FD633DD6F4E147D5226FD290B362A4E69B01042ACC0D88E15CE2BD8DDF5D7A83EDB903884D48426A9A825A361436FDD540F7DB13B8A03BF6E585EC82E4714E58659D06C033C62C09067AA12A4625295C8B1B3443D880B69491DD7C7BFB6D4374AFE4F8C1BCEC642216E873E64D39CE432B328F10677A7D61CE27BF8262A6C
+
+3.验签
+``` python
+## 公钥
+pubKey = '''-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDWzfgLP/jGGLeh/wCdF4bqkZHu
+aYodn61rCbHN0LLWYF1YS9PX+52qKUQlm/aVRZXLbduU8WRPexuHpeGeusuLOaVs
+00UlWhqn0OekVXuqbE1p4NX6DIC/ZntRpdRzvKiMR6cU4weso+bq3FrhzU9HKGOT
+wISpmWuK/rdKtYvCVwIDAQAB
+-----END PUBLIC KEY-----'''
+
+rsaPub = RSA.importKey(pubKey)
+mdFive = MD5.new('123456'.encode('utf-8'))
+verifier = PKCS1_v1_5.new(rsaPub)
+# 进行验签，sign是前面签名时得到的byte序列
+if verifier.verify(mdFive, sign):
+  print("verify ok")
+else :
+  print("verify failed")
+
+```
