@@ -1,6 +1,6 @@
 jboss中添加数据源，在web项目中使用EJB的话可以通过persistence.xml配置web项目使用的数据源
 
-1. jboss中添加数据源之后，可以在EJB项目中通过自己代码获取数据源的连接
++ jboss中添加数据源之后，可以在EJB项目中通过自己代码获取数据源的连接
 
 ``` xml
      <local-tx-datasource>
@@ -35,7 +35,7 @@ jboss中添加数据源，在web项目中使用EJB的话可以通过persistence.
 	}
 ```
 
-1. 要注意在jboss数据源配置的时候，有一个属性“use-java-context”
++ 要注意在jboss数据源配置的时候，有一个属性“use-java-context”
 数据源定义文件**-ds.xml中，有个use-java-context属性，把它设为false的话，JNDIView里生成的数据源就会位于全局命名空间，没有java前缀了。
 
 比如下面这个配置的数据源，和上面的有不同
