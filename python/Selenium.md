@@ -46,6 +46,8 @@ dirver.get("https//www.baidu.com")
 
 然后在代码里打开这个文件，并将cookie加入到driver中
 ```python
+import codecs
+
 f = codecs.open("./cookies.json", mode='r', encoding = 'utf-8')
   cookies = json.loads(f.read())
   for cookie in cookies:
