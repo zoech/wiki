@@ -15,7 +15,7 @@ dirver.get("https//www.baidu.com")
 
 ```
 
-3. driver 建立，打开某个域名之后可以向driver里加cookie，
+3. driver 建立，打开某个域名之后可以向driver里加cookie，需要注意，driver只有在打开了一个网站之后，才能加入cookies，否则会报InvalidCookieDomainException
 
 先建立cookie的一个json文件cookies.json，格式大概如下：
 
