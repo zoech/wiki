@@ -1,10 +1,11 @@
 # 利用selenium编写spider的一些记录
+[TOC]
 
-1. 环境依赖
+## 1. 环境依赖
     1. python selenium 模块
     1. geckodriver + firefox, 或者 chrome + chrome driver
     
-1. 建立driver并打开网页
+## 2. 建立driver并打开网页
 ```python
 from selenium import webdriver
 
@@ -15,7 +16,8 @@ dirver.get("https//www.baidu.com")
 
 ```
 
-3. driver 建立，打开某个域名之后可以向driver里加cookie，需要注意，driver只有在打开了一个网站之后，才能加入cookies，否则会报InvalidCookieDomainException
+## 3. 添加cookie
+ driver 建立打开某个域名之后可以向driver里加cookie，需要注意，driver只有在打开了一个网站之后，才能加入cookies，否则会报InvalidCookieDomainException
 
 先建立cookie的一个json文件cookies.json，格式大概如下：
 
@@ -60,7 +62,8 @@ f = codecs.open("./cookies.json", mode='r', encoding = 'utf-8')
 f.close()
 ```
 
-4. 可以使用driver.find_element_by_xpath() 来获取页面元素具体还有哪些方法可以选择页面元素，可以在idle里按tab键查看，例如下面模拟登陆
+## 4. 模拟页面输入、点击
+ 可以使用driver.find_element_by_xpath() 来获取页面元素，具体还有哪些方法可以选择页面元素，可以在idle里按tab键查看，例如下面模拟登陆
 
 ```python
 driver.find_element_by_xpath("//input[@name='username']").send_keys("user")
@@ -81,7 +84,7 @@ WebDriverWait(driver, 15).until(
             )
 ```
 
-5. 解释页面内容  
+## 5. 解释页面内容
    页面内容可以使用lxml模块来解释，例子如下:
 
 ```python
@@ -93,4 +96,13 @@ page = etree.HTML(body) # 构建html对象
 # 下面获取class为'ivu-table-tbody'的tbody元素里的tr子元素列表,
 # 模式类似上面driver.find_element_by_xpath
 tr_list = page.xpath("//tbody[@class='ivu-table-tbody']/tr")
+```
+
+## 6. 页面滚动
+要模拟页面上下滚动，需要使用dirver的脚本解释接口，即driver.execute_script()  
+
+例子(将页面滚动到高度47000)：
+```python
+while int(driver.execute_script("return document.body.scrollHeight;")) < 47000:
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 ```
