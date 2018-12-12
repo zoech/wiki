@@ -2,7 +2,7 @@
 
 ## 1. 环境依赖
 * python selenium 模块
-* geckodriver + firefox, 或者 chrome + chrome driver
+* geckodriver + firefox, 或者 chrome + chrome driver, 其中driver的可执行文件需要放到系统环境的path中
     
 ## 2. 建立driver并打开网页
 ```python
