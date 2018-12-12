@@ -1,8 +1,8 @@
 # 利用selenium编写spider的一些记录
 
 ## 1. 环境依赖
-    * python selenium 模块
-    * geckodriver + firefox, 或者 chrome + chrome driver
+* python selenium 模块
+* geckodriver + firefox, 或者 chrome + chrome driver
     
 ## 2. 建立driver并打开网页
 ```python
