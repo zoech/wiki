@@ -6,3 +6,7 @@
   pip18.1, 安装时 需要 的  openssl 版本是 Win32OpenSSL-1_0_2q
 * 然后，需要看pip install 时的编译命令， 看 -I 包含的头文件目录， 如果报错没有open/xxx.h 头文件， 就去openssl安装目录找到，再复制过去 -I  包含的目录 
 * 再然后，如果报某个库 xxx.lib 找不到， 就去openssl 中找，放到python安装目录的 libs/ 下
+
+
+
+最后， crypto 在 windows 下安装了之后，文件夹目录为小写的 "crypto" ，但是在python 中，pip记录的信息应该是 "Crypto" 模块,  去 python site-package 下找到crypto模块改为大写
