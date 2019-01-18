@@ -1,0 +1,8 @@
+
+# windows 装 python 的 m2crypto 和 crypto 库都有大坑
+
+* 首先有可能需要装swig， 看pip信息有没有报swig错误
+* 其次，openssl 需要安装，而且版本需要对上，
+  pip18.1, 安装时 需要 的  openssl 版本是 Win32OpenSSL-1_0_2q
+* 然后，需要看pip install 时的编译命令， 看 -I 包含的头文件目录， 如果报错没有open/xxx.h 头文件， 就去openssl安装目录找到，再复制过去 -I  包含的目录 
+* 再然后，如果报某个库 xxx.lib 找不到， 就去openssl 中找，放到python安装目录的 libs/ 下
