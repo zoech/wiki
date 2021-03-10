@@ -2,4 +2,4 @@
 
 ### buffer pool optimize
 
-![mysql buffer pool](../../resources/arch/mysql/innodb-buffer-pool-list.png)
+![mysql buffer pool](https://github.com/zoech/wiki/blob/master/resources/arch/mysql/innodb-buffer-pool-list.png)
