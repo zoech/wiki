@@ -67,12 +67,12 @@ mysql> select * from lock_test;
 mysql> begin;
 mysql> select * from lock_test where id=11 for update;
 mysql> select * from data_locks;         
-+--------+-----------------------------------------+-----------------------+-----------+----------+---------------+-------------+----------------+-------------------+------------+-----------------------+-----------+---------------+-------------+-----------+
-| ENGINE | ENGINE_LOCK_ID                          | ENGINE_TRANSACTION_ID | THREAD_ID | EVENT_ID | OBJECT_SCHEMA | OBJECT_NAME | PARTITION_NAME | SUBPARTITION_NAME | INDEX_NAME | OBJECT_INSTANCE_BEGIN | LOCK_TYPE | LOCK_MODE     | LOCK_STATUS | LOCK_DATA |
-+--------+-----------------------------------------+-----------------------+-----------+----------+---------------+-------------+----------------+-------------------+------------+-----------------------+-----------+---------------+-------------+-----------+
-| INNODB | 139862213866568:1133:139862120425264    |               7262616 |        86 |       32 | my_test       | lock_test   | NULL           | NULL              | NULL       |       139862120425264 | TABLE     | IX            | GRANTED     | NULL      |
-| INNODB | 139862213866568:76:4:11:139862120422304 |               7262616 |        86 |       32 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X,REC_NOT_GAP | GRANTED     | 11        |
-+--------+-----------------------------------------+-----------------------+-----------+----------+---------------+-------------+----------------+-------------------+------------+-----------------------+-----------+---------------+-------------+-----------
++--------+----------+---------------+-------------+------------+-----------------------+-----------+---------------+-------------+-----------+
+| ENGINE | ........ | OBJECT_SCHEMA | OBJECT_NAME | INDEX_NAME | OBJECT_INSTANCE_BEGIN | LOCK_TYPE | LOCK_MODE     | LOCK_STATUS | LOCK_DATA |
++--------+----------+---------------+-------------+------------+-----------------------+-----------+---------------+-------------+-----------+
+| INNODB |          | my_test       | lock_test   | NULL       |       139862120425264 | TABLE     | IX            | GRANTED     | NULL      |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X,REC_NOT_GAP | GRANTED     | 11        |
++--------+----------+---------------+-------------+------------+-----------------------+-----------+---------------+-------------+-----------+
 
 mysql> rollback;
 ```
@@ -82,27 +82,27 @@ mysql> rollback;
 mysql> begin;
 mysql> select * from lock_test where id>20 for update;
 mysql> select * from data_locks;
-+--------+-----------------------------------------+-----------------------+-----------+----------+---------------+-------------+----------------+-------------------+------------+-----------------------+-----------+-----------+-------------+------------------------+
-| ENGINE | ENGINE_LOCK_ID                          | ENGINE_TRANSACTION_ID | THREAD_ID | EVENT_ID | OBJECT_SCHEMA | OBJECT_NAME | PARTITION_NAME | SUBPARTITION_NAME | INDEX_NAME | OBJECT_INSTANCE_BEGIN | LOCK_TYPE | LOCK_MODE | LOCK_STATUS | LOCK_DATA              |
-+--------+-----------------------------------------+-----------------------+-----------+----------+---------------+-------------+----------------+-------------------+------------+-----------------------+-----------+-----------+-------------+------------------------+
-| INNODB | 139862213866568:1133:139862120425264    |               7262617 |        86 |       36 | my_test       | lock_test   | NULL           | NULL              | NULL       |       139862120425264 | TABLE     | IX        | GRANTED     | NULL                   |
-| INNODB | 139862213866568:76:4:1:139862120422304  |               7262617 |        86 |       36 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | supremum pseudo-record |
-| INNODB | 139862213866568:76:4:2:139862120422304  |               7262617 |        86 |       36 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 66                     |
-| INNODB | 139862213866568:76:4:3:139862120422304  |               7262617 |        86 |       36 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 50                     |
-| INNODB | 139862213866568:76:4:16:139862120422304 |               7262617 |        86 |       36 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 37                     |
-| INNODB | 139862213866568:76:4:17:139862120422304 |               7262617 |        86 |       36 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 38                     |
-| INNODB | 139862213866568:76:4:18:139862120422304 |               7262617 |        86 |       36 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 39                     |
-| INNODB | 139862213866568:76:4:19:139862120422304 |               7262617 |        86 |       36 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 40                     |
-| INNODB | 139862213866568:76:4:20:139862120422304 |               7262617 |        86 |       36 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 41                     |
-| INNODB | 139862213866568:76:4:21:139862120422304 |               7262617 |        86 |       36 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 42                     |
-| INNODB | 139862213866568:76:4:22:139862120422304 |               7262617 |        86 |       36 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 43                     |
-| INNODB | 139862213866568:76:4:23:139862120422304 |               7262617 |        86 |       36 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 44                     |
-| INNODB | 139862213866568:76:4:24:139862120422304 |               7262617 |        86 |       36 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 45                     |
-| INNODB | 139862213866568:76:4:25:139862120422304 |               7262617 |        86 |       36 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 67                     |
-| INNODB | 139862213866568:76:4:26:139862120422304 |               7262617 |        86 |       36 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 68                     |
-| INNODB | 139862213866568:76:4:27:139862120422304 |               7262617 |        86 |       36 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 70                     |
-| INNODB | 139862213866568:76:4:28:139862120422304 |               7262617 |        86 |       36 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 71                     |
-+--------+-----------------------------------------+-----------------------+-----------+----------+---------------+-------------+----------------+-------------------+------------+-----------------------+-----------+-----------+-------------+------------------------+
++--------+----------+---------------+-------------+------------+-----------------------+-----------+-----------+-------------+------------------------+
+| ENGINE | ........ | OBJECT_SCHEMA | OBJECT_NAME | INDEX_NAME | OBJECT_INSTANCE_BEGIN | LOCK_TYPE | LOCK_MODE | LOCK_STATUS | LOCK_DATA              |
++--------+----------+---------------+-------------+------------+-----------------------+-----------+-----------+-------------+------------------------+
+| INNODB |          | my_test       | lock_test   | NULL       |       139862120425264 | TABLE     | IX        | GRANTED     | NULL                   |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | supremum pseudo-record |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 66                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 50                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 37                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 38                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 39                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 40                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 41                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 42                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 43                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 44                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 45                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 67                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 68                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 70                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 71                     |
++--------+----------+---------------+-------------+------------+-----------------------+-----------+-----------+-------------+------------------------+
 mysql> rollback;
 ```
 
@@ -111,13 +111,13 @@ mysql> rollback;
 mysql> begin;
 mysql> select * from lock_test where ut=8 for update;
 mysql> select * from data_locks;
-+--------+----------------------------------------+-----------------------+-----------+----------+---------------+-------------+----------------+-------------------+------------+-----------------------+-----------+---------------+-------------+-----------+
-| ENGINE | ENGINE_LOCK_ID                         | ENGINE_TRANSACTION_ID | THREAD_ID | EVENT_ID | OBJECT_SCHEMA | OBJECT_NAME | PARTITION_NAME | SUBPARTITION_NAME | INDEX_NAME | OBJECT_INSTANCE_BEGIN | LOCK_TYPE | LOCK_MODE     | LOCK_STATUS | LOCK_DATA |
-+--------+----------------------------------------+-----------------------+-----------+----------+---------------+-------------+----------------+-------------------+------------+-----------------------+-----------+---------------+-------------+-----------+
-| INNODB | 139862213866568:1133:139862120425264   |               7262619 |        86 |       40 | my_test       | lock_test   | NULL           | NULL              | NULL       |       139862120425264 | TABLE     | IX            | GRANTED     | NULL      |
-| INNODB | 139862213866568:76:5:9:139862120422304 |               7262619 |        86 |       40 | my_test       | lock_test   | NULL           | NULL              | ukt        |       139862120422304 | RECORD    | X,REC_NOT_GAP | GRANTED     | 8, 9      |
-| INNODB | 139862213866568:76:4:9:139862120422648 |               7262619 |        86 |       40 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422648 | RECORD    | X,REC_NOT_GAP | GRANTED     | 9         |
-+--------+----------------------------------------+-----------------------+-----------+----------+---------------+-------------+----------------+-------------------+------------+-----------------------+-----------+---------------+-------------+-----------+
++--------+----------+---------------+-------------+------------+-----------------------+-----------+---------------+-------------+-----------+
+| ENGINE | ........ | OBJECT_SCHEMA | OBJECT_NAME | INDEX_NAME | OBJECT_INSTANCE_BEGIN | LOCK_TYPE | LOCK_MODE     | LOCK_STATUS | LOCK_DATA |
++--------+----------+---------------+-------------+------------+-----------------------+-----------+---------------+-------------+-----------+
+| INNODB |          | my_test       | lock_test   | NULL       |       139862120425264 | TABLE     | IX            | GRANTED     | NULL      |
+| INNODB |          | my_test       | lock_test   | ukt        |       139862120422304 | RECORD    | X,REC_NOT_GAP | GRANTED     | 8, 9      |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422648 | RECORD    | X,REC_NOT_GAP | GRANTED     | 9         |
++--------+----------+---------------+-------------+------------+-----------------------+-----------+---------------+-------------+-----------+
 
 mysql> rollback;
 
@@ -128,39 +128,39 @@ mysql> rollback;
 mysql> begin;
 mysql> select * from lock_test where ut>40 for update;
 mysql> select * from data_locks;
-+--------+-----------------------------------------+-----------------------+-----------+----------+---------------+-------------+----------------+-------------------+------------+-----------------------+-----------+-----------+-------------+------------------------+
-| ENGINE | ENGINE_LOCK_ID                          | ENGINE_TRANSACTION_ID | THREAD_ID | EVENT_ID | OBJECT_SCHEMA | OBJECT_NAME | PARTITION_NAME | SUBPARTITION_NAME | INDEX_NAME | OBJECT_INSTANCE_BEGIN | LOCK_TYPE | LOCK_MODE | LOCK_STATUS | LOCK_DATA              |
-+--------+-----------------------------------------+-----------------------+-----------+----------+---------------+-------------+----------------+-------------------+------------+-----------------------+-----------+-----------+-------------+------------------------+
-| INNODB | 139862213866568:1133:139862120425264    |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | NULL       |       139862120425264 | TABLE     | IX        | GRANTED     | NULL                   |
-| INNODB | 139862213866568:76:4:1:139862120422304  |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | supremum pseudo-record |
-| INNODB | 139862213866568:76:4:2:139862120422304  |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 66                     |
-| INNODB | 139862213866568:76:4:3:139862120422304  |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 50                     |
-| INNODB | 139862213866568:76:4:4:139862120422304  |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 4                      |
-| INNODB | 139862213866568:76:4:5:139862120422304  |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 5                      |
-| INNODB | 139862213866568:76:4:6:139862120422304  |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 6                      |
-| INNODB | 139862213866568:76:4:7:139862120422304  |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 7                      |
-| INNODB | 139862213866568:76:4:8:139862120422304  |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 8                      |
-| INNODB | 139862213866568:76:4:9:139862120422304  |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 9                      |
-| INNODB | 139862213866568:76:4:10:139862120422304 |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 10                     |
-| INNODB | 139862213866568:76:4:11:139862120422304 |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 11                     |
-| INNODB | 139862213866568:76:4:12:139862120422304 |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 12                     |
-| INNODB | 139862213866568:76:4:13:139862120422304 |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 16                     |
-| INNODB | 139862213866568:76:4:14:139862120422304 |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 17                     |
-| INNODB | 139862213866568:76:4:15:139862120422304 |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 18                     |
-| INNODB | 139862213866568:76:4:16:139862120422304 |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 37                     |
-| INNODB | 139862213866568:76:4:17:139862120422304 |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 38                     |
-| INNODB | 139862213866568:76:4:18:139862120422304 |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 39                     |
-| INNODB | 139862213866568:76:4:19:139862120422304 |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 40                     |
-| INNODB | 139862213866568:76:4:20:139862120422304 |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 41                     |
-| INNODB | 139862213866568:76:4:21:139862120422304 |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 42                     |
-| INNODB | 139862213866568:76:4:22:139862120422304 |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 43                     |
-| INNODB | 139862213866568:76:4:23:139862120422304 |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 44                     |
-| INNODB | 139862213866568:76:4:24:139862120422304 |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 45                     |
-| INNODB | 139862213866568:76:4:25:139862120422304 |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 67                     |
-| INNODB | 139862213866568:76:4:26:139862120422304 |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 68                     |
-| INNODB | 139862213866568:76:4:27:139862120422304 |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 70                     |
-| INNODB | 139862213866568:76:4:28:139862120422304 |               7262620 |        86 |       44 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 71                     |
-+--------+-----------------------------------------+-----------------------+-----------+----------+---------------+-------------+----------------+-------------------+------------+-----------------------+-----------+-----------+-------------+------------------------+
++--------+----------+---------------+-------------+------------+-----------------------+-----------+-----------+-------------+------------------------+
+| ENGINE | ........ | OBJECT_SCHEMA | OBJECT_NAME | INDEX_NAME | OBJECT_INSTANCE_BEGIN | LOCK_TYPE | LOCK_MODE | LOCK_STATUS | LOCK_DATA              |
++--------+----------+---------------+-------------+------------+-----------------------+-----------+-----------+-------------+------------------------+
+| INNODB |          | my_test       | lock_test   | NULL       |       139862120425264 | TABLE     | IX        | GRANTED     | NULL                   |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | supremum pseudo-record |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 66                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 50                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 4                      |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 5                      |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 6                      |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 7                      |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 8                      |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 9                      |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 10                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 11                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 12                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 16                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 17                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 18                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 37                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 38                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 39                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 40                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 41                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 42                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 43                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 44                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 45                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 67                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 68                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 70                     |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422304 | RECORD    | X         | GRANTED     | 71                     |
++--------+----------+---------------+-------------+------------+-----------------------+-----------+-----------+-------------+------------------------+
 29 rows in set (0.00 sec)
 
 mysql> rollback;
@@ -171,24 +171,24 @@ mysql> rollback;
 mysql> begin;
 mysql> select * from lock_test where ut > 40 and ut < 63 for update;
 mysql> select * from data_locks;
-+--------+-----------------------------------------+-----------------------+-----------+----------+---------------+-------------+----------------+-------------------+------------+-----------------------+-----------+---------------+-------------+-----------+
-| ENGINE | ENGINE_LOCK_ID                          | ENGINE_TRANSACTION_ID | THREAD_ID | EVENT_ID | OBJECT_SCHEMA | OBJECT_NAME | PARTITION_NAME | SUBPARTITION_NAME | INDEX_NAME | OBJECT_INSTANCE_BEGIN | LOCK_TYPE | LOCK_MODE     | LOCK_STATUS | LOCK_DATA |
-+--------+-----------------------------------------+-----------------------+-----------+----------+---------------+-------------+----------------+-------------------+------------+-----------------------+-----------+---------------+-------------+-----------+
-| INNODB | 139862213866568:1133:139862120425264    |               7262621 |        86 |       48 | my_test       | lock_test   | NULL           | NULL              | NULL       |       139862120425264 | TABLE     | IX            | GRANTED     | NULL      |
-| INNODB | 139862213866568:76:5:16:139862120422304 |               7262621 |        86 |       48 | my_test       | lock_test   | NULL           | NULL              | ukt        |       139862120422304 | RECORD    | X             | GRANTED     | 55, 37    |
-| INNODB | 139862213866568:76:5:17:139862120422304 |               7262621 |        86 |       48 | my_test       | lock_test   | NULL           | NULL              | ukt        |       139862120422304 | RECORD    | X             | GRANTED     | 56, 38    |
-| INNODB | 139862213866568:76:5:18:139862120422304 |               7262621 |        86 |       48 | my_test       | lock_test   | NULL           | NULL              | ukt        |       139862120422304 | RECORD    | X             | GRANTED     | 59, 39    |
-| INNODB | 139862213866568:76:5:19:139862120422304 |               7262621 |        86 |       48 | my_test       | lock_test   | NULL           | NULL              | ukt        |       139862120422304 | RECORD    | X             | GRANTED     | 60, 40    |
-| INNODB | 139862213866568:76:5:20:139862120422304 |               7262621 |        86 |       48 | my_test       | lock_test   | NULL           | NULL              | ukt        |       139862120422304 | RECORD    | X             | GRANTED     | 61, 41    |
-| INNODB | 139862213866568:76:5:21:139862120422304 |               7262621 |        86 |       48 | my_test       | lock_test   | NULL           | NULL              | ukt        |       139862120422304 | RECORD    | X             | GRANTED     | 62, 42    |
-| INNODB | 139862213866568:76:5:22:139862120422304 |               7262621 |        86 |       48 | my_test       | lock_test   | NULL           | NULL              | ukt        |       139862120422304 | RECORD    | X             | GRANTED     | 63, 43    |
-| INNODB | 139862213866568:76:4:16:139862120422648 |               7262621 |        86 |       48 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422648 | RECORD    | X,REC_NOT_GAP | GRANTED     | 37        |
-| INNODB | 139862213866568:76:4:17:139862120422648 |               7262621 |        86 |       48 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422648 | RECORD    | X,REC_NOT_GAP | GRANTED     | 38        |
-| INNODB | 139862213866568:76:4:18:139862120422648 |               7262621 |        86 |       48 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422648 | RECORD    | X,REC_NOT_GAP | GRANTED     | 39        |
-| INNODB | 139862213866568:76:4:19:139862120422648 |               7262621 |        86 |       48 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422648 | RECORD    | X,REC_NOT_GAP | GRANTED     | 40        |
-| INNODB | 139862213866568:76:4:20:139862120422648 |               7262621 |        86 |       48 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422648 | RECORD    | X,REC_NOT_GAP | GRANTED     | 41        |
-| INNODB | 139862213866568:76:4:21:139862120422648 |               7262621 |        86 |       48 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422648 | RECORD    | X,REC_NOT_GAP | GRANTED     | 42        |
-+--------+-----------------------------------------+-----------------------+-----------+----------+---------------+-------------+----------------+-------------------+------------+-----------------------+-----------+---------------+-------------+-----------+
++--------+----------+---------------+-------------+------------+-----------------------+-----------+---------------+-------------+-----------+
+| ENGINE | ........ | OBJECT_SCHEMA | OBJECT_NAME | INDEX_NAME | OBJECT_INSTANCE_BEGIN | LOCK_TYPE | LOCK_MODE     | LOCK_STATUS | LOCK_DATA |
++--------+----------+---------------+-------------+------------+-----------------------+-----------+---------------+-------------+-----------+
+| INNODB |          | my_test       | lock_test   | NULL       |       139862120425264 | TABLE     | IX            | GRANTED     | NULL      |
+| INNODB |          | my_test       | lock_test   | ukt        |       139862120422304 | RECORD    | X             | GRANTED     | 55, 37    |
+| INNODB |          | my_test       | lock_test   | ukt        |       139862120422304 | RECORD    | X             | GRANTED     | 56, 38    |
+| INNODB |          | my_test       | lock_test   | ukt        |       139862120422304 | RECORD    | X             | GRANTED     | 59, 39    |
+| INNODB |          | my_test       | lock_test   | ukt        |       139862120422304 | RECORD    | X             | GRANTED     | 60, 40    |
+| INNODB |          | my_test       | lock_test   | ukt        |       139862120422304 | RECORD    | X             | GRANTED     | 61, 41    |
+| INNODB |          | my_test       | lock_test   | ukt        |       139862120422304 | RECORD    | X             | GRANTED     | 62, 42    |
+| INNODB |          | my_test       | lock_test   | ukt        |       139862120422304 | RECORD    | X             | GRANTED     | 63, 43    |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422648 | RECORD    | X,REC_NOT_GAP | GRANTED     | 37        |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422648 | RECORD    | X,REC_NOT_GAP | GRANTED     | 38        |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422648 | RECORD    | X,REC_NOT_GAP | GRANTED     | 39        |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422648 | RECORD    | X,REC_NOT_GAP | GRANTED     | 40        |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422648 | RECORD    | X,REC_NOT_GAP | GRANTED     | 41        |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422648 | RECORD    | X,REC_NOT_GAP | GRANTED     | 42        |
++--------+----------+---------------+-------------+------------+-----------------------+-----------+---------------+-------------+-----------+
 14 rows in set (0.00 sec)
 
 mysql> rollback;
@@ -203,14 +203,14 @@ mysql> rollback;
 mysql> begin;
 mysql> select * from lock_test where it = 15 for update;
 mysql> select * from data_locks;
-+--------+-----------------------------------------+-----------------------+-----------+----------+---------------+-------------+----------------+-------------------+------------+-----------------------+-----------+---------------+-------------+-----------+
-| ENGINE | ENGINE_LOCK_ID                          | ENGINE_TRANSACTION_ID | THREAD_ID | EVENT_ID | OBJECT_SCHEMA | OBJECT_NAME | PARTITION_NAME | SUBPARTITION_NAME | INDEX_NAME | OBJECT_INSTANCE_BEGIN | LOCK_TYPE | LOCK_MODE     | LOCK_STATUS | LOCK_DATA |
-+--------+-----------------------------------------+-----------------------+-----------+----------+---------------+-------------+----------------+-------------------+------------+-----------------------+-----------+---------------+-------------+-----------+
-| INNODB | 139862213866568:1133:139862120425264    |               7262622 |        86 |       52 | my_test       | lock_test   | NULL           | NULL              | NULL       |       139862120425264 | TABLE     | IX            | GRANTED     | NULL      |
-| INNODB | 139862213866568:76:6:15:139862120422304 |               7262622 |        86 |       52 | my_test       | lock_test   | NULL           | NULL              | nit        |       139862120422304 | RECORD    | X             | GRANTED     | 15, 18    |
-| INNODB | 139862213866568:76:4:15:139862120422648 |               7262622 |        86 |       52 | my_test       | lock_test   | NULL           | NULL              | PRIMARY    |       139862120422648 | RECORD    | X,REC_NOT_GAP | GRANTED     | 18        |
-| INNODB | 139862213866568:76:6:16:139862120422992 |               7262622 |        86 |       52 | my_test       | lock_test   | NULL           | NULL              | nit        |       139862120422992 | RECORD    | X,GAP         | GRANTED     | 16, 37    |
-+--------+-----------------------------------------+-----------------------+-----------+----------+---------------+-------------+----------------+-------------------+------------+-----------------------+-----------+---------------+-------------+-----------+
++--------+----------+---------------+-------------+------------+-----------------------+-----------+---------------+-------------+-----------+
+| ENGINE | ........ | OBJECT_SCHEMA | OBJECT_NAME | INDEX_NAME | OBJECT_INSTANCE_BEGIN | LOCK_TYPE | LOCK_MODE     | LOCK_STATUS | LOCK_DATA |
++--------+----------+---------------+-------------+------------+-----------------------+-----------+---------------+-------------+-----------+
+| INNODB |          | my_test       | lock_test   | NULL       |       139862120425264 | TABLE     | IX            | GRANTED     | NULL      |
+| INNODB |          | my_test       | lock_test   | nit        |       139862120422304 | RECORD    | X             | GRANTED     | 15, 18    |
+| INNODB |          | my_test       | lock_test   | PRIMARY    |       139862120422648 | RECORD    | X,REC_NOT_GAP | GRANTED     | 18        |
+| INNODB |          | my_test       | lock_test   | nit        |       139862120422992 | RECORD    | X,GAP         | GRANTED     | 16, 37    |
++--------+----------+---------------+-------------+------------+-----------------------+-----------+---------------+-------------+-----------+
 
 mysql> rollback;
 ```
